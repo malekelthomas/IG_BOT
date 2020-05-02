@@ -10,8 +10,14 @@ browser = webdriver.Firefox()
 
 browser.get('https://www.instagram.com/')
 
+usernameInput = browser.find_element_by_name("username") #finds HTML element with username tag, in this case the username text field
 
-sleep(5)
+usernameInput.send_keys("lekedraws") #enters text into field 
 
+passwordInput = browser.find_element_by_name("password")
+
+passwordInput.send_keys("pw")
+
+browser.sleep(5)
 
 browser.close()
