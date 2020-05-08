@@ -4,32 +4,40 @@ from time import sleep
 
 from selenium import webdriver
 
+class LoginPage():
+	def __init__(self):
+		self.browser = webdriver.Firefox()
+		self.logininfo = []
 
-browser = webdriver.Firefox()
+	def loadCredentials(self):
+		with open("credentials.txt") as f:
+			for line in f.readlines():
+				self.logininfo.append(line)
+		f.close()
 
-logininfo = []
+	def login(self):
+		self.browser.get('https://www.instagram.com/')
+		self.browser.implicitly_wait(5)
+		usernameIn = self.browser.find_element_by_xpath("//input[@name='username']")
+		passwordIn = self.browser.find_element_by_xpath("//input[@name='password']")
 
-with open("credentials.txt") as f:
-	for line in f.readlines():
-		logininfo.append(line)
-	f.close()
+		usernameIn.send_keys(self.logininfo[0])
+		passwordIn.send_keys(self.logininfo[1])
+
+		login_button = self.browser.find_element_by_xpath("//button[@type='submit']")
+		login_button.click()
+
+	def close(self):
+		self.browser.close()
 
 
-browser.get('https://www.instagram.com/')
+def main():
+	ig = LoginPage()
+	ig.loadCredentials()
+	ig.login()
+	sleep(5)
+	ig.close()
 
-usernameInput = browser.find_element_by_name("username") #finds HTML element by name field, in this case the username text field
+if __name__ == "__main__":
+	main()
 
-usernameInput.send_keys(logininfo[0]) #enters text into field 
-
-
-passwordInput = browser.find_element_by_name("password")
-
-passwordInput.send_keys(logininfo[1])
-
-login_button = browser.find_element_by_xpath("//button[@type='submit']")
-
-login_button.click()
-
-sleep(5)
-
-browser.close()
