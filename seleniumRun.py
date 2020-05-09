@@ -4,9 +4,12 @@ from time import sleep
 
 from selenium import webdriver
 
+from instapy import InstaPy
+from instapy import smart_run
+
 class LoginPage():
-	def __init__(self):
-		self.browser = webdriver.Firefox()
+	def __init__(self, browser):
+		self.browser = browser
 		self.logininfo = []
 
 	def loadCredentials(self):
@@ -26,16 +29,24 @@ class LoginPage():
 
 		login_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		login_button.click()
+		sleep(5)
+
+		return igFeedPage(self.browser)
 
 	def close(self):
 		self.browser.close()
 
+class igFeedPage():
+	def __init__(self, browser):
+		self.browser = browser
+
 
 def main():
-	ig = LoginPage()
+	browser = webdriver.Firefox()
+	ig = LoginPage(browser)
 	ig.loadCredentials()
 	ig.login()
-	sleep(5)
+
 	ig.close()
 
 if __name__ == "__main__":
