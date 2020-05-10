@@ -15,7 +15,7 @@ class LoginPage():
 	def loadCredentials(self):
 		with open("credentials.txt") as f:
 			for line in f.readlines():
-				self.credentials.append(line)
+				self.credentials.append(line.strip())
 		f.close()
 
 	def login(self):
@@ -47,12 +47,22 @@ class igFeedPage():
                   password= self.credentials[1],
                   headless_browser=False)
 
+		with smart_run(session):
+			accs = ["maleke_t"]
+			session.follow_by_list(accs, times=1, sleep_delay=600, interact=False)
+
+	def getCredentials(self):
+		return self.credentials
 
 def main():
 	browser = webdriver.Firefox()
-	ig = LoginPage(browser)
-	ig.loadCredentials()
-	ig.login()
+	loginPage = LoginPage(browser)
+	loginPage.loadCredentials()
+	feedPage = loginPage.login()
+
+	#print(feedPage.getCredentials())
+	feedPage.startInstaPySession()
+
 
 	#ig.close()
 
